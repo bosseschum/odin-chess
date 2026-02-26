@@ -16,4 +16,16 @@ describe Board do
       expect(pawns.all? { |p| p.is_a?(Pawn) && p.color == :white }).to be true
     end
   end
+
+  describe '#move_piece' do
+    it 'moves a piece to an empty square' do
+      board = Board.new(empty: true)
+      rook = Rook.new(:white, [0, 0])
+      board.place(rook)
+
+      board.move_piece([0, 0], [0, 5])
+      expect(board.at(0, 5)).to eq(rook)
+      expect(board.at(0, 0)).to be_nil
+    end
+  end
 end

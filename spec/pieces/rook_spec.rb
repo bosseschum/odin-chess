@@ -8,6 +8,16 @@ describe Rook do
     board.place(rook)
   end
 
+  it 'tracks starting position' do
+    rook = Rook.new(:black, [0, 7])
+    expect(rook.starting_position).to eq([0, 7])
+  end
+
+  it 'tracks moved state' do
+    rook = Rook.new(:white, [0, 0])
+    expect(rook.moved).to be false
+  end
+
   it 'moves vertivally and horizontally' do
     moves = rook.moves(board)
 
