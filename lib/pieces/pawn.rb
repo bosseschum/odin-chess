@@ -8,5 +8,6 @@ class Pawn < Character
     super
     @starting_position = position.dup
     @en_passantable = false
+    @can_double_step = true
   end
 end

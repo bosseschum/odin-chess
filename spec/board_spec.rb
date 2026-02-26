@@ -11,9 +11,13 @@ describe Board do
   end
 
   describe '#setup_board' do
-    it '#places white pawns on rank 2' do
+    it 'places white pawns on rank 2' do
       pawns = board.grid[6].compact
       expect(pawns.all? { |p| p.is_a?(Pawn) && p.color == :white }).to be true
+    end
+
+    it 'places the white King on E1' do
+      expect(board.at(7, 4)).to be_a(King)
     end
   end
 
