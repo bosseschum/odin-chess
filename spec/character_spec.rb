@@ -15,6 +15,7 @@ describe Character do
 
     it 'equals true after first move' do
       pawn = Pawn.new(:white, [0, 3])
+      pawn.mark_moved
       expect(pawn.moved).to be true
     end
   end

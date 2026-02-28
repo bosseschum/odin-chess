@@ -14,4 +14,10 @@ class Character
   def mark_moved
     @moved = true
   end
+
+  def enemy?(piece)
+    return false if piece.nil?
+
+    @color != piece.color
+  end
 end

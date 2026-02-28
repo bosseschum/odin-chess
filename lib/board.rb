@@ -35,15 +35,13 @@ class Board
     place(Bishop.new(:black, [0, 5]))
 
     # Queens
-    place(Quenn.new(:white, [7, 3]))
-    place(Quenn.new(:black, [0, 3]))
+    place(Queen.new(:white, [7, 3]))
+    place(Queen.new(:black, [0, 3]))
 
     # Kings
     place(King.new(:white, [7, 4]))
     place(King.new(:black, [0, 4]))
   end
-
-  private
 
   def place(piece)
     row, col = piece.position
