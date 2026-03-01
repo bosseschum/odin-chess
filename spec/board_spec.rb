@@ -30,7 +30,38 @@ describe Board do
 
       board.move_piece([0, 0], [0, 5])
       expect(board.at([0, 5])).to eq(rook)
-      expect(board.at([0, 0])).to be_nil
+    end
+
+    it 'clears the previous square' do
+      board = Board.new(empty: true)
+      rook = Rook.new(:white, [7, 7])
+      board.place(rook)
+
+      board.move_piece([7, 7], [7, 0])
+      expect(board.at([7, 7])).to be_nil
+    end
+  end
+
+  describe '#filter_moves' do
+    knight = Knight.new(:white, [7, 1])
+    pawn = Pawn.new(:white, [5, 2])
+    enemy = Pawn.new(:black, [5, 0])
+    moves = knight.moves
+    it 'filters out of bounds moves' do
+      filtered_moves = board.filter_moves(knight, moves)
+      expect(filtered_moves).to_not include([8, 3])
+    end
+
+    it 'filters squares blocked by allied pieces' do
+      board.place(pawn)
+      filtered_moves = board.filter_moves(knight, moves)
+      expect(filtered_moves).to_not include([5, 2])
+    end
+
+    it 'does not filter squares with enemy pieces' do
+      board.place(enemy)
+      filtered_moves = board.filter_moves(knight, moves)
+      expect(filtered_moves).to include([5, 0])
     end
   end
 end

@@ -54,7 +54,32 @@ class Board
     @grid[row][col]
   end
 
-  def move_piece(from, _to)
-    Board.at(from)
+  def move_piece(from, to)
+    piece = at(from)
+    piece.position = to
+    place(piece)
+    clear_square(from)
+  end
+
+  def out_of_bounds?(position)
+    x, y = position
+    x > 7 || x.negative? || y > 7 || y.negative?
+  end
+
+  def blocked?(piece, position)
+    !at(position).nil? && at(position).color == piece.color
+  end
+
+  def filter_moves(piece, moves)
+    moves.reject do |pos|
+      out_of_bounds?(pos) || blocked?(piece, pos)
+    end
+  end
+
+  private
+
+  def clear_square(position)
+    row, col = position
+    @grid[row][col] = nil
   end
 end

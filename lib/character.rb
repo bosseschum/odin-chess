@@ -2,8 +2,8 @@
 
 # Character class representing basic functionality for the pieces in a CLI chess game.
 class Character
-  attr_reader :color, :position
-  attr_accessor :moved
+  attr_reader :color
+  attr_accessor :moved, :position
 
   def initialize(color, position)
     @color = color
