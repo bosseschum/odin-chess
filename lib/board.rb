@@ -7,41 +7,43 @@ class Board
   def initialize(empty: false)
     @grid = Array.new(8) { Array.new(8) }
     @empty = empty
+    @white_pieces = []
+    @black_pieces = []
     setup_board unless @empty == true
   end
 
   def setup_board
     # Pawns
     8.times do |col|
-      place(Pawn.new(:white, [6, col]))
-      place(Pawn.new(:black, [1, col]))
+      @white_pieces << place(Pawn.new(:white, [6, col]))
+      @black_pieces << place(Pawn.new(:black, [1, col]))
     end
 
     # Rooks
-    place(Rook.new(:white, [7, 0]))
-    place(Rook.new(:white, [7, 7]))
-    place(Rook.new(:black, [0, 0]))
-    place(Rook.new(:black, [0, 7]))
+    @white_pieces << place(Rook.new(:white, [7, 0]))
+    @white_pieces << place(Rook.new(:white, [7, 7]))
+    @black_pieces << place(Rook.new(:black, [0, 0]))
+    @black_pieces << place(Rook.new(:black, [0, 7]))
 
     # Knights
-    place(Knight.new(:white, [7, 1]))
-    place(Knight.new(:white, [7, 6]))
-    place(Knight.new(:black, [0, 1]))
-    place(Knight.new(:black, [0, 6]))
+    @white_pieces << place(Knight.new(:white, [7, 1]))
+    @white_pieces << place(Knight.new(:white, [7, 6]))
+    @black_pieces << place(Knight.new(:black, [0, 1]))
+    @black_pieces << place(Knight.new(:black, [0, 6]))
 
     # Bishops
-    place(Bishop.new(:white, [7, 2]))
-    place(Bishop.new(:white, [7, 5]))
-    place(Bishop.new(:black, [0, 2]))
-    place(Bishop.new(:black, [0, 5]))
+    @white_pieces << place(Bishop.new(:white, [7, 2]))
+    @white_pieces << place(Bishop.new(:white, [7, 5]))
+    @black_pieces << place(Bishop.new(:black, [0, 2]))
+    @black_pieces << place(Bishop.new(:black, [0, 5]))
 
     # Queens
-    place(Queen.new(:white, [7, 3]))
-    place(Queen.new(:black, [0, 3]))
+    @white_pieces << place(Queen.new(:white, [7, 3]))
+    @black_pieces << place(Queen.new(:black, [0, 3]))
 
     # Kings
-    place(King.new(:white, [7, 4]))
-    place(King.new(:black, [0, 4]))
+    @white_pieces << place(King.new(:white, [7, 4]))
+    @black_pieces << place(King.new(:black, [0, 4]))
   end
 
   def place(piece)
@@ -54,9 +56,14 @@ class Board
     @grid[row][col]
   end
 
+  def remove_piece(piece)
+    piece.color == :white ? @white_pieces.delete(piece) : @black_pieces.delete(piece)
+  end
+
   def move_piece(from, to)
     piece = at(from)
     piece.position = to
+    remove_piece(at(to)) if at(to) && at(to).color != piece.color
     place(piece)
     clear_square(from)
   end
@@ -75,6 +82,8 @@ class Board
       out_of_bounds?(pos) || blocked?(piece, pos)
     end
   end
+
+  def in_check?; end
 
   private
 
