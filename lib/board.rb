@@ -2,7 +2,7 @@
 
 # Board class representing a chess board for a CLI chess game.
 class Board
-  attr_reader :grid
+  attr_reader :grid, :white_pieces, :black_pieces
 
   def initialize(empty: false)
     @grid = Array.new(8) { Array.new(8) }
@@ -83,7 +83,17 @@ class Board
     end
   end
 
-  def in_check?; end
+  def in_check?(king)
+    if king.color == :white
+      @black_pieces.any? do |piece|
+        filter_moves(piece, piece.moves).include?(king.position)
+      end
+    else
+      @white_pieces.any? do |piece|
+        filter_moves(piece, piece.moves).include?(king.position)
+      end
+    end
+  end
 
   private
 

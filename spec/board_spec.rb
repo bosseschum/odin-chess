@@ -64,4 +64,29 @@ describe Board do
       expect(filtered_moves).to include([5, 0])
     end
   end
+
+  describe '#in_check?' do
+    board = Board.new(empty: true)
+    let(:king) { King.new(:black, [7, 7]) }
+    context 'When the king is in danger' do
+      it 'returns true' do
+        rook = Rook.new(:white, [7, 1])
+        board.place(rook)
+        board.white_pieces << rook
+        board.place(king)
+        expect(board.in_check?(king)).to eq true
+        board.remove_piece(rook)
+      end
+    end
+
+    context 'When the king is not in danger' do
+      it 'returns false' do
+        rook = Rook.new(:white, [6, 2])
+        board.place(rook)
+        board.white_pieces << rook
+        board.place(king)
+        expect(board.in_check?(king)).to eq false
+      end
+    end
+  end
 end
