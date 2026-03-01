@@ -4,9 +4,10 @@
 class Board
   attr_reader :grid
 
-  def initialize
+  def initialize(empty: false)
     @grid = Array.new(8) { Array.new(8) }
-    setup_board
+    @empty = empty
+    setup_board unless @empty == true
   end
 
   def setup_board
@@ -46,5 +47,14 @@ class Board
   def place(piece)
     row, col = piece.position
     grid[row][col] = piece
+  end
+
+  def at(position)
+    row, col = position
+    @grid[row][col]
+  end
+
+  def move_piece(from, _to)
+    Board.at(from)
   end
 end

@@ -7,8 +7,6 @@ class King < Character
   def initialize(color, position)
     super
     @starting_position = position.dup
-    @in_check = false
-    @castling_rights = false
   end
 
   def moves
