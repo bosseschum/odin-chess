@@ -20,4 +20,8 @@ class Character
 
     @color != piece.color
   end
+
+  def to_s
+    "#{color.capitalize} #{self.class.name} at #{position}"
+  end
 end
