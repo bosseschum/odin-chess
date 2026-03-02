@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 describe Game do
-  xit 'switches player after a valid move' do
+  it 'switches player after a valid move' do
     game = Game.new
     current = game.current_player
     game.switch_player

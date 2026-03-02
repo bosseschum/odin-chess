@@ -63,9 +63,48 @@ class Board
   def move_piece(from, to)
     piece = at(from)
     piece.position = to
-    remove_piece(at(to)) if at(to) && at(to).color != piece.color
+    captured = (remove_piece(at(to)) if at(to) && at(to).color != piece.color)
     place(piece)
     clear_square(from)
+    captured
+  end
+
+  def revert_move(current, original, captured)
+    piece = at(current)
+    piece.position = original
+    unless captured.nil?
+      @white_pieces << captured if captured.color == :white
+      @black_pieces << captured if captured.color == :black
+      place(captured)
+    end
+    place(piece)
+    clear_square(current)
+  end
+
+  def simulate_move(from, to)
+    captured = move_piece(from, to)
+    check = yield
+    revert_move(to, from, captured)
+    check
+  end
+
+  def any_legal_moves?(color)
+    king = find_king(color)
+    if king.color == :white
+      @white_pieces.any? do |piece|
+        moves = filter_moves(piece, piece.moves)
+        moves.any? do |move|
+          simulate_move(piece.position, move) { !in_check?(king) }
+        end
+      end
+    else
+      @black_pieces.any? do |piece|
+        moves = filter_moves(piece, piece.moves)
+        moves.any? do |move|
+          simulate_move(piece.position, move) { !in_check?(king) }
+        end
+      end
+    end
   end
 
   def out_of_bounds?(position)
@@ -95,10 +134,28 @@ class Board
     end
   end
 
+  def checkmate?(color)
+    king = find_king(color)
+    !any_legal_moves?(color) && in_check?(king)
+  end
+
+  def stalemate?(color)
+    king = find_king(color)
+    !any_legal_moves?(color) && !in_check?(king)
+  end
+
   private
 
   def clear_square(position)
     row, col = position
     @grid[row][col] = nil
+  end
+
+  def find_king(color)
+    if color == :white
+      @white_pieces.find { |k| k.is_a?(King) }
+    else
+      @black_pieces.find { |k| k.is_a?(King) }
+    end
   end
 end

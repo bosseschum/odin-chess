@@ -9,4 +9,8 @@ class Game
     @players = [Player.new(:white), Player.new(:black)]
     @current_player = @players.first
   end
+
+  def switch_player
+    @current_player = @current_player.color == :white ? players.last : players.first
+  end
 end

@@ -89,4 +89,89 @@ describe Board do
       end
     end
   end
+
+  describe '#any_legal_moves?' do
+    let(:board) { Board.new(empty: true) }
+    let(:king) { King.new(:white, [7, 4]) }
+    before do
+      board.place(king)
+      board.white_pieces << king
+    end
+
+    context 'When there are legal moves left' do
+      it 'returns true' do
+        expect(board.any_legal_moves?(:white)).to be true
+      end
+    end
+
+    context 'When there are no legal moves left' do
+      it 'returns false' do
+        rook1 = Rook.new(:black, [7, 0])
+        board.place(rook1)
+        rook2 = Rook.new(:black, [6, 7])
+        board.place(rook2)
+        board.black_pieces << rook1
+        board.black_pieces << rook2
+        expect(board.any_legal_moves?(:white)).to be false
+      end
+    end
+  end
+
+  describe '#checkmate?' do
+    let(:board) { Board.new(empty: true) }
+    let(:king) { King.new(:white, [7, 4]) }
+    before do
+      board.place(king)
+      board.white_pieces << king
+    end
+
+    context 'When the king is in check and no legal moves are left' do
+      it 'returns true' do
+        rook1 = Rook.new(:black, [7, 0])
+        board.place(rook1)
+        rook2 = Rook.new(:black, [6, 7])
+        board.place(rook2)
+        board.black_pieces << rook1
+        board.black_pieces << rook2
+        expect(board.checkmate?(:white)).to be true
+      end
+    end
+
+    context 'When the king is in check but there are legal moves' do
+      it 'returns false' do
+        rook = Rook.new(:black, [6, 7])
+        board.place(rook)
+        board.black_pieces << rook
+        expect(board.checkmate?(:white)).to be false
+      end
+    end
+  end
+
+  describe '#stalemate?' do
+    let(:board) { Board.new(empty: true) }
+    let(:king) { King.new(:white, [7, 0]) }
+    before do
+      board.place(king)
+      board.white_pieces << king
+    end
+
+    context 'When the king is not in check and no legal moves are left' do
+      it 'returns true' do
+        rook1 = Rook.new(:black, [6, 4])
+        board.place(rook1)
+        rook2 = Rook.new(:black, [5, 1])
+        board.place(rook2)
+        board.black_pieces << rook1
+        board.black_pieces << rook2
+        print board.any_legal_moves?(:white)
+        expect(board.stalemate?(:white)).to be true
+      end
+    end
+
+    context 'When the king is not in check and there are legal moves left' do
+      it 'returns false' do
+        expect(board.stalemate?(:white)).to be false
+      end
+    end
+  end
 end
