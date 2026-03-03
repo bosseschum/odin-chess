@@ -25,7 +25,7 @@ class Game
   end
 
   def play
-    puts "Let's play a game of chess. White begins.\n\n"
+    puts "Let's play a game of chess. White begins."
 
     take_turn until game_over?
     feedback
@@ -49,16 +49,31 @@ class Game
     end
     puts "\n"
     print 'Which piece do you want to move? '
-    take_input
+    input = nil
+    loop do
+      input = take_input
+      break if board.at(input)&.color == @current_player.color && !board.blocked?(board.at(input), input)
+
+      puts 'Invalid piece, try again.'
+    end
+    input
   end
 
   def choose_move(position)
     piece = board.at(position)
+    moves = board.filter_moves(piece, piece.moves)
     puts "#{piece} can move to: "
-    print(board.filter_moves(piece, piece.moves).map { |pos| to_notation(pos) })
+    print(moves.map { |pos| to_notation(pos) })
     puts
-    move = take_input
-    board.move_piece(position, move)
+
+    input = nil
+    loop do
+      input = take_input
+      break if moves.include?(input)
+
+      puts 'Invalid move, try again.'
+    end
+    board.move_piece(position, input)
   end
 
   def game_over?

@@ -149,6 +149,7 @@ class Board
 
   def display_board
     row = 8
+    puts
     @grid.each do |rank|
       print "#{row} "
       row -= 1
