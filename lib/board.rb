@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
+require_relative 'modules/parsing'
+
 # Board class representing a chess board for a CLI chess game.
 class Board
+  include Parsing
   attr_reader :grid, :white_pieces, :black_pieces
 
   def initialize(empty: false)
@@ -145,17 +148,17 @@ class Board
   end
 
   def display_board
-    row = 0
+    row = 8
     @grid.each do |rank|
       print "#{row} "
-      row += 1
+      row -= 1
       rank.each do |square|
         print "| #{square.nil? ? ' ' : square.symbol} |"
       end
       puts
     end
-    print '    0    1    2    3    4    5    6    7'
-    puts
+    print "    A    B    C    D    E    F    G    H\n"
+    puts "\n"
   end
 
   private

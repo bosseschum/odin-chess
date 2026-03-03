@@ -2,6 +2,7 @@
 
 # Character class representing basic functionality for the pieces in a CLI chess game.
 class Character
+  include Parsing
   attr_reader :color
   attr_accessor :moved, :position
 
@@ -22,6 +23,6 @@ class Character
   end
 
   def to_s
-    "#{color.capitalize} #{self.class.name} at #{position}"
+    "#{color.capitalize} #{self.class.name} at #{to_notation(@position)}"
   end
 end

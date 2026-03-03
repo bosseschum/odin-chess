@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
+require_relative 'modules/parsing'
+
 # Game class for orchestrating a game of chess.
 class Game
+  include Parsing
   attr_reader :board, :players, :current_player
 
   def initialize
@@ -22,7 +25,7 @@ class Game
   end
 
   def play
-    puts "Let's play a game of chess. White begins."
+    puts "Let's play a game of chess. White begins.\n\n"
 
     take_turn until game_over?
     feedback
@@ -31,7 +34,8 @@ class Game
   private
 
   def choose_piece
-    puts 'Choose a piece to move. You have: '
+    puts 'Choose a piece to move (by position). You have: '
+    puts
     if @current_player.color == :white
       board.white_pieces.each_with_index do |piece, index|
         print "#{piece} | "
@@ -43,13 +47,16 @@ class Game
         puts if ((index + 1) % 4).zero?
       end
     end
+    puts "\n"
+    print 'Which piece do you want to move? '
     take_input
   end
 
   def choose_move(position)
     piece = board.at(position)
     puts "#{piece} can move to: "
-    print board.filter_moves(piece, piece.moves)
+    print(board.filter_moves(piece, piece.moves).map { |pos| to_notation(pos) })
+    puts
     move = take_input
     board.move_piece(position, move)
   end
@@ -58,15 +65,15 @@ class Game
     @board.checkmate?(@current_player.color) || @board.stalemate?(@current_player.color)
   end
 
-  def take_input
-    gets.chomp.split('').map(&:to_i)
-  end
-
   def feedback
     if @board.checkmate?
       puts "Checkmate! #{color.capitalize} loses."
     elsif @board.stalemate?
       puts "Stalemate. #{color.capitalize} has to admit defeat."
     end
+  end
+
+  def take_input
+    parse_input(gets.chomp.split(''))
   end
 end
