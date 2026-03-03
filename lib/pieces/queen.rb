@@ -15,4 +15,12 @@ class Queen < Character
   def moves
     slide + slide_diagonally
   end
+
+  def symbol
+    if @color == :white
+      '♕'
+    else
+      '♛'
+    end
+  end
 end

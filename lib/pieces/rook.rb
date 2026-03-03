@@ -17,4 +17,12 @@ class Rook < Character
   def moves
     slide
   end
+
+  def symbol
+    if @color == :white
+      '♖'
+    else
+      '♜'
+    end
+  end
 end

@@ -14,4 +14,12 @@ class Knight < Character
 
     offset.map { |dx, dy| [x + dx, y + dy] }
   end
+
+  def symbol
+    if @color == :white
+      '♘'
+    else
+      '♞'
+    end
+  end
 end

@@ -17,4 +17,12 @@ class King < Character
                [x + 1, y + 1], [x + 1, y - 1], [x - 1, y + 1],
                [x - 1, y - 1])
   end
+
+  def symbol
+    if @color == :white
+      '♔'
+    else
+      '♚'
+    end
+  end
 end

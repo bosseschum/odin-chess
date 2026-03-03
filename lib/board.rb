@@ -144,6 +144,20 @@ class Board
     !any_legal_moves?(color) && !in_check?(king)
   end
 
+  def display_board
+    row = 0
+    @grid.each do |rank|
+      print "#{row} "
+      row += 1
+      rank.each do |square|
+        print "| #{square.nil? ? ' ' : square.symbol} |"
+      end
+      puts
+    end
+    print '    0    1    2    3    4    5    6    7'
+    puts
+  end
+
   private
 
   def clear_square(position)

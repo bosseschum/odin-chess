@@ -15,11 +15,11 @@ class Pawn < Character
     moves = []
     x, y = @position
     if @color == :black
-      moves << [x, y + 1]
-      moves << [x, y + 2] if @moved == false
+      moves << [x + 1, y]
+      moves << [x + 2, y] if @moved == false
     elsif @color == :white
-      moves << [x, y - 1]
-      moves << [x, y - 2] if @moved == false
+      moves << [x - 1, y]
+      moves << [x - 2, y] if @moved == false
     end
     moves
   end
@@ -35,5 +35,13 @@ class Pawn < Character
       captures << [x - 1, y - 1]
     end
     captures
+  end
+
+  def symbol
+    if @color == :white
+      '♙'
+    else
+      '♟'
+    end
   end
 end

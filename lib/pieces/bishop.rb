@@ -15,4 +15,12 @@ class Bishop < Character
   def moves
     slide_diagonally
   end
+
+  def symbol
+    if @color == :white
+      '♗'
+    else
+      '♝'
+    end
+  end
 end
