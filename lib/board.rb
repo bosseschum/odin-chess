@@ -119,9 +119,26 @@ class Board
     !at(position).nil? && at(position).color == piece.color
   end
 
+  def path_blocked?(start, position)
+    row_diff = position[0] - start[0]
+    col_diff = position[1] - start[1]
+    return false if row_diff.zero? && col_diff.zero?
+
+    row_step = row_diff.zero? ? 0 : row_diff / row_diff.abs
+    col_step = col_diff.zero? ? 0 : col_diff / col_diff.abs
+
+    current = [start[0] + row_step, start[1] + col_step]
+    while current != position
+      return true unless at(current).nil?
+
+      current = [current[0] + row_step, current[1] + col_step]
+    end
+    false
+  end
+
   def filter_moves(piece, moves)
     moves.reject do |pos|
-      out_of_bounds?(pos) || blocked?(piece, pos)
+      out_of_bounds?(pos) || blocked?(piece, pos) || path_blocked?(piece.position, pos)
     end
   end
 

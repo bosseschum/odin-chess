@@ -52,7 +52,9 @@ class Game
     input = nil
     loop do
       input = take_input
-      break if board.at(input)&.color == @current_player.color && !board.blocked?(board.at(input), input)
+      piece = board.at(input)
+      moves = board.filter_moves(piece, piece.moves) if piece
+      break if piece&.color == @current_player.color && moves && !moves.empty?
 
       puts 'Invalid piece, try again.'
     end
